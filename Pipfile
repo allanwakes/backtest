@@ -9,6 +9,7 @@ verify_ssl = true
 backtrader = "*"
 matplotlib = "*"
 pandas = "*"
+records = "*"
 
 [requires]
 python_version = "3.7"

@@ -32,7 +32,7 @@ class CrossOver(bt.Strategy):
     def log(self, txt, dt=None):
         # Logging function for this strategy
         dt = dt or self.datas[0].datetime.date(0)
-        print('%s, %s' % (dt.isoformat(), txt))
+        print('%s, %s, %d' % (dt.isoformat(), txt, self.p.slow))
 
     def notify_trade(self, trade):
         if not trade.isclosed:
@@ -59,8 +59,9 @@ class CrossOver(bt.Strategy):
 
 if __name__ == '__main__':
     cerebro = bt.Cerebro()
+    km = {'fast': 5, 'slow': 10, 'order_pct': 0.9}
 
-    cerebro.addstrategy(CrossOver)
+    cerebro.addstrategy(CrossOver, **km)
 
     # create datafeed
     dataframe = pd.read_csv(
@@ -90,6 +91,7 @@ if __name__ == '__main__':
     cerebro.broker.setcommission(commission=0.001)
 
     cerebro.addanalyzer(btanalyzers.TradeAnalyzer, _name='tademo')
+    cerebro.addanalyzer(btanalyzers.Transactions, _name='transdemo')
 
     print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
     thestrats = cerebro.run()
@@ -99,6 +101,9 @@ if __name__ == '__main__':
     # https://github.com/Oxylo/btreport/blob/master/report.py
     thestrat = thestrats[0]
     trade_analysis = thestrat.analyzers.tademo.get_analysis()
+    trans_analysis = thestrat.analyzers.transdemo.get_analysis()
+    for k, v in trans_analysis.items():
+        print(k, v[0])
     trade_msg = "number of trades: {}\n%winning: {:.2f}%\n%losing: {:.2f}%\ntotal return: {:.2f}%"
     print(trade_msg.format(
         trade_analysis.total.total,
