@@ -10,6 +10,7 @@ backtrader = "*"
 matplotlib = "*"
 pandas = "*"
 records = "*"
+ccxt = "*"
 
 [requires]
 python_version = "3.7"
