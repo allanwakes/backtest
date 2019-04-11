@@ -11,6 +11,7 @@ matplotlib = "*"
 pandas = "*"
 records = "*"
 ccxt = "*"
+pysocks = "*"
 
 [requires]
 python_version = "3.7"
